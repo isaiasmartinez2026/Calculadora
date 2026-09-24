@@ -9,13 +9,11 @@
 
     <title>Calculadora</title>
 
-    <!-- Ícono de la calculadora -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23202020'/%3E%3Crect x='22' y='15' width='56' height='70' rx='8' fill='%23333333'/%3E%3Crect x='29' y='22' width='42' height='15' rx='3' fill='%23000000'/%3E%3Ccircle cx='34' cy='48' r='5' fill='white'/%3E%3Ccircle cx='50' cy='48' r='5' fill='white'/%3E%3Ccircle cx='66' cy='48' r='5' fill='%23ff9f0a'/%3E%3Ccircle cx='34' cy='63' r='5' fill='white'/%3E%3Ccircle cx='50' cy='63' r='5' fill='white'/%3E%3Ccircle cx='66' cy='63' r='5' fill='%23ff9f0a'/%3E%3Ccircle cx='34' cy='78' r='5' fill='white'/%3E%3Ccircle cx='50' cy='78' r='5' fill='white'/%3E%3Ccircle cx='66' cy='78' r='5' fill='%23ff9f0a'/%3E%3C/svg%3E">
 
     <link rel="manifest" href="manifest.json">
 
     <meta name="theme-color" content="#000000">
-
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Calculadora">
@@ -50,7 +48,6 @@
             max-width: 430px;
             height: 100%;
             margin: auto;
-
             padding: 25px 20px 30px;
 
             display: flex;
@@ -70,20 +67,15 @@
             width: auto;
             height: auto;
             aspect-ratio: auto;
-
             padding: 10px 15px;
-
             border-radius: 15px;
-
             background: #222;
             color: white;
-
             font-size: 15px;
         }
 
         .historial {
             display: none;
-
             position: absolute;
             left: 20px;
             right: 20px;
@@ -93,13 +85,10 @@
             overflow-y: auto;
 
             padding: 15px;
-
             border-radius: 20px;
-
             background: #202020;
 
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-
             z-index: 10;
         }
 
@@ -124,31 +113,24 @@
             aspect-ratio: auto;
 
             padding: 7px 10px;
-
             border-radius: 10px;
 
             background: #d32f2f;
-
             font-size: 13px;
         }
 
         .operacion-historial {
             padding: 12px 5px;
-
             border-bottom: 1px solid #333;
 
             color: #ddd;
-
             font-size: 18px;
-
             text-align: right;
         }
 
         .sin-historial {
             padding: 20px 5px;
-
             color: #888;
-
             text-align: center;
         }
 
@@ -161,7 +143,6 @@
             justify-content: flex-end;
 
             padding: 10px;
-
             margin-bottom: 15px;
 
             color: white;
@@ -179,15 +160,12 @@
             width: 100%;
 
             display: grid;
-
             grid-template-columns: repeat(4, 1fr);
-
             gap: 12px;
         }
 
         button {
             width: 100%;
-
             aspect-ratio: 1 / 1;
 
             border: none;
@@ -200,7 +178,6 @@
             background: #333;
 
             cursor: pointer;
-
             touch-action: manipulation;
 
             transition:
@@ -225,9 +202,7 @@
 
         .cero {
             grid-column: span 2;
-
             border-radius: 100px;
-
             aspect-ratio: auto;
         }
 
@@ -293,7 +268,7 @@
                 %
             </button>
 
-            <button class="operador" onclick="agregar('/')">
+            <button class="operador" onclick="agregar('*')">
                 ÷
             </button>
 
@@ -348,6 +323,18 @@
 
         function agregar(valor) {
 
+            // Si aparece Error, al tocar un número
+            // empieza una nueva operación.
+            if (pantalla.innerText === "Error") {
+                pantalla.innerText = valor;
+                return;
+            }
+
+            // Mostrar × en pantalla, pero usar * para calcular.
+            if (valor === "*") {
+                valor = "×";
+            }
+
             if (pantalla.innerText === "0") {
                 pantalla.innerText = valor;
             } else {
@@ -357,11 +344,19 @@
 
 
         function borrar() {
+
+            // AC siempre vuelve la pantalla a cero.
             pantalla.innerText = "0";
         }
 
 
         function borrarNumero() {
+
+            // Si hay Error, borrar todo.
+            if (pantalla.innerText === "Error") {
+                pantalla.innerText = "0";
+                return;
+            }
 
             if (pantalla.innerText.length > 1) {
 
@@ -382,7 +377,12 @@
 
                 let operacion = pantalla.innerText;
 
-                let resultado = eval(operacion);
+                // Convertimos × nuevamente a * para poder calcular.
+                let operacionCalculo =
+                    operacion.replace(/×/g, "*");
+
+                let resultado =
+                    eval(operacionCalculo);
 
                 let operacionVisible =
                     operacion

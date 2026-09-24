@@ -3,14 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>Mi Calculadora</title>
+    <title>Calculadora</title>
 
     <link rel="manifest" href="manifest.json">
 
-    <meta name="theme-color" content="#202124">
+    <meta name="theme-color" content="#000000">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -31,75 +32,217 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
+            background: #000;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #202124;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+                "Helvetica Neue", Arial, sans-serif;
+            color: white;
             touch-action: manipulation;
         }
 
         .calculadora {
-            width: min(92vw, 360px);
-            background: #303134;
-            padding: 20px;
-            border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 430px;
+            height: 100%;
+            margin: auto;
+
+            padding: 25px 20px 30px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+
+            background: #000;
+        }
+
+        .barra {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .boton-historial {
+            width: auto;
+            height: auto;
+            aspect-ratio: auto;
+
+            padding: 10px 15px;
+
+            border-radius: 15px;
+
+            background: #222;
+            color: white;
+
+            font-size: 15px;
+        }
+
+        .historial {
+            display: none;
+
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            top: 70px;
+
+            max-height: 55vh;
+            overflow-y: auto;
+
+            padding: 15px;
+
+            border-radius: 20px;
+
+            background: #202020;
+
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+
+            z-index: 10;
+        }
+
+        .historial.visible {
+            display: block;
+        }
+
+        .historial-titulo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 12px;
+
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .borrar-historial {
+            width: auto;
+            height: auto;
+            aspect-ratio: auto;
+
+            padding: 7px 10px;
+
+            border-radius: 10px;
+
+            background: #d32f2f;
+
+            font-size: 13px;
+        }
+
+        .operacion-historial {
+            padding: 12px 5px;
+
+            border-bottom: 1px solid #333;
+
+            color: #ddd;
+
+            font-size: 18px;
+
+            text-align: right;
+        }
+
+        .sin-historial {
+            padding: 20px 5px;
+
+            color: #888;
+
+            text-align: center;
         }
 
         .pantalla {
-            background: #171717;
-            color: white;
-            font-size: 40px;
-            text-align: right;
-            padding: 20px 15px;
-            border-radius: 15px;
+            width: 100%;
+            min-height: 110px;
+
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+
+            padding: 10px;
+
             margin-bottom: 15px;
-            min-height: 70px;
+
+            color: white;
+
+            font-size: clamp(55px, 16vw, 90px);
+            font-weight: 300;
+
+            text-align: right;
+
             overflow: hidden;
             white-space: nowrap;
         }
 
         .botones {
+            width: 100%;
+
             display: grid;
+
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+
+            gap: 12px;
         }
 
         button {
-            height: 60px;
-            border: none;
-            border-radius: 15px;
-            font-size: 22px;
-            cursor: pointer;
-            background: #444;
-            color: white;
+            width: 100%;
 
-            /* Evita comportamientos de navegador al tocar */
+            aspect-ratio: 1 / 1;
+
+            border: none;
+            border-radius: 50%;
+
+            font-size: 28px;
+            font-weight: 400;
+
+            color: white;
+            background: #333;
+
+            cursor: pointer;
+
             touch-action: manipulation;
-            -webkit-user-select: none;
-            user-select: none;
-            outline: none;
+
+            transition:
+                transform 0.08s,
+                filter 0.08s;
         }
 
         button:active {
-            transform: scale(0.95);
-            opacity: 0.8;
+            transform: scale(0.90);
+            filter: brightness(1.35);
         }
 
-        .operador {
-            background: #ff9500;
-        }
-
+        .operador,
         .igual {
-            background: #2196f3;
+            background: #ff9f0a;
         }
 
         .borrar {
-            background: #d32f2f;
+            background: #a5a5a5;
+            color: black;
+        }
+
+        .cero {
+            grid-column: span 2;
+
+            border-radius: 100px;
+
+            aspect-ratio: auto;
+        }
+
+        @media (max-height: 700px) {
+
+            .calculadora {
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+
+            .pantalla {
+                min-height: 70px;
+                font-size: 60px;
+            }
+
+            .botones {
+                gap: 8px;
+            }
         }
     </style>
 </head>
@@ -108,44 +251,100 @@
 
     <div class="calculadora">
 
+        <div class="barra">
+            <button class="boton-historial" onclick="mostrarHistorial()">
+                🕘 Historial
+            </button>
+        </div>
+
+        <div class="historial" id="historial">
+
+            <div class="historial-titulo">
+                <span>Historial</span>
+
+                <button class="borrar-historial"
+                    onclick="borrarHistorial()">
+                    Borrar
+                </button>
+            </div>
+
+            <div id="listaHistorial"></div>
+
+        </div>
+
         <div class="pantalla" id="pantalla">
             0
         </div>
 
         <div class="botones">
 
-            <button class="borrar" onclick="borrar()">AC</button>
-            <button onclick="borrarNumero()">⌫</button>
-            <button class="operador" onclick="agregar('%')">%</button>
-            <button class="operador" onclick="agregar('/')">÷</button>
+            <button class="borrar" onclick="borrar()">
+                AC
+            </button>
+
+            <button onclick="borrarNumero()">
+                ⌫
+            </button>
+
+            <button class="operador" onclick="agregar('%')">
+                %
+            </button>
+
+            <button class="operador" onclick="agregar('/')">
+                ÷
+            </button>
 
             <button onclick="agregar('7')">7</button>
             <button onclick="agregar('8')">8</button>
             <button onclick="agregar('9')">9</button>
-            <button class="operador" onclick="agregar('*')">×</button>
+
+            <button class="operador" onclick="agregar('*')">
+                ×
+            </button>
 
             <button onclick="agregar('4')">4</button>
             <button onclick="agregar('5')">5</button>
             <button onclick="agregar('6')">6</button>
-            <button class="operador" onclick="agregar('-')">−</button>
+
+            <button class="operador" onclick="agregar('-')">
+                −
+            </button>
 
             <button onclick="agregar('1')">1</button>
             <button onclick="agregar('2')">2</button>
             <button onclick="agregar('3')">3</button>
-            <button class="operador" onclick="agregar('+')">+</button>
 
-            <button onclick="agregar('0')" style="grid-column: span 2;">0</button>
-            <button onclick="agregar('.')">.</button>
-            <button class="igual" onclick="calcular()">=</button>
+            <button class="operador" onclick="agregar('+')">
+                +
+            </button>
+
+            <button class="cero" onclick="agregar('0')">
+                0
+            </button>
+
+            <button onclick="agregar('.')">
+                .
+            </button>
+
+            <button class="igual" onclick="calcular()">
+                =
+            </button>
 
         </div>
 
     </div>
 
     <script>
+
         let pantalla = document.getElementById("pantalla");
 
+        let historial = JSON.parse(
+            localStorage.getItem("historialCalculadora")
+        ) || [];
+
+
         function agregar(valor) {
+
             if (pantalla.innerText === "0") {
                 pantalla.innerText = valor;
             } else {
@@ -153,35 +352,129 @@
             }
         }
 
+
         function borrar() {
+
             pantalla.innerText = "0";
         }
 
+
         function borrarNumero() {
+
             if (pantalla.innerText.length > 1) {
+
                 pantalla.innerText =
                     pantalla.innerText.slice(0, -1);
+
             } else {
+
                 pantalla.innerText = "0";
+
             }
         }
 
+
         function calcular() {
+
             try {
-                let resultado = eval(pantalla.innerText);
+
+                let operacion = pantalla.innerText;
+
+                let resultado = eval(operacion);
+
+                let operacionVisible =
+                    operacion
+                        .replace(/\*/g, "×")
+                        .replace(/\//g, "÷");
+
+                historial.unshift(
+                    operacionVisible + " = " + resultado
+                );
+
+                localStorage.setItem(
+                    "historialCalculadora",
+                    JSON.stringify(historial)
+                );
+
                 pantalla.innerText = resultado;
+
+                actualizarHistorial();
+
             } catch {
+
                 pantalla.innerText = "Error";
             }
         }
-    </script>
 
-    <script>
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker.register("./sw.js");
+
+        function mostrarHistorial() {
+
+            let ventana =
+                document.getElementById("historial");
+
+            ventana.classList.toggle("visible");
+
+            actualizarHistorial();
+        }
+
+
+        function actualizarHistorial() {
+
+            let lista =
+                document.getElementById("listaHistorial");
+
+            if (historial.length === 0) {
+
+                lista.innerHTML =
+                    '<div class="sin-historial">No hay operaciones todavía</div>';
+
+                return;
+            }
+
+            lista.innerHTML = "";
+
+            historial.forEach(operacion => {
+
+                let elemento =
+                    document.createElement("div");
+
+                elemento.className =
+                    "operacion-historial";
+
+                elemento.innerText =
+                    operacion;
+
+                lista.appendChild(elemento);
+
             });
         }
+
+
+        function borrarHistorial() {
+
+            historial = [];
+
+            localStorage.removeItem(
+                "historialCalculadora"
+            );
+
+            actualizarHistorial();
+        }
+
+
+        actualizarHistorial();
+
+
+        if ("serviceWorker" in navigator) {
+
+            window.addEventListener("load", () => {
+
+                navigator.serviceWorker.register("./sw.js");
+
+            });
+
+        }
+
     </script>
 
 </body>

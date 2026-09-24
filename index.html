@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mi Calculadora</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#202124">
+
+    <!-- Configuración para iPhone -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Calculadora">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #202124;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .calculadora {
+            width: 320px;
+            background: #303134;
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .pantalla {
+            background: #171717;
+            color: white;
+            font-size: 40px;
+            text-align: right;
+            padding: 20px 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            min-height: 50px;
+            overflow: hidden;
+        }
+
+        .botones {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            height: 60px;
+            border: none;
+            border-radius: 15px;
+            font-size: 22px;
+            cursor: pointer;
+            background: #444;
+            color: white;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        .operador {
+            background: #ff9500;
+        }
+
+        .igual {
+            background: #2196f3;
+        }
+
+        .borrar {
+            background: #d32f2f;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculadora">
+
+        <div class="pantalla" id="pantalla">
+            0
+        </div>
+
+        <div class="botones">
+
+            <button class="borrar" onclick="borrar()">AC</button>
+            <button onclick="borrarNumero()">⌫</button>
+            <button class="operador" onclick="agregar('%')">%</button>
+            <button class="operador" onclick="agregar('/')">÷</button>
+
+            <button onclick="agregar('7')">7</button>
+            <button onclick="agregar('8')">8</button>
+            <button onclick="agregar('9')">9</button>
+            <button class="operador" onclick="agregar('*')">×</button>
+
+            <button onclick="agregar('4')">4</button>
+            <button onclick="agregar('5')">5</button>
+            <button onclick="agregar('6')">6</button>
+            <button class="operador" onclick="agregar('-')">−</button>
+
+            <button onclick="agregar('1')">1</button>
+            <button onclick="agregar('2')">2</button>
+            <button onclick="agregar('3')">3</button>
+            <button class="operador" onclick="agregar('+')">+</button>
+
+            <button onclick="agregar('0')" style="grid-column: span 2;">0</button>
+            <button onclick="agregar('.')">.</button>
+            <button class="igual" onclick="calcular()">=</button>
+
+        </div>
+
+    </div>
+
+    <script>
+        let pantalla = document.getElementById("pantalla");
+
+        function agregar(valor) {
+            if (pantalla.innerText === "0") {
+                pantalla.innerText = valor;
+            } else {
+                pantalla.innerText += valor;
+            }
+        }
+
+        function borrar() {
+            pantalla.innerText = "0";
+        }
+
+        function borrarNumero() {
+            if (pantalla.innerText.length > 1) {
+                pantalla.innerText =
+                    pantalla.innerText.slice(0, -1);
+            } else {
+                pantalla.innerText = "0";
+            }
+        }
+
+        function calcular() {
+            try {
+                let resultado = eval(pantalla.innerText);
+                pantalla.innerText = resultado;
+            } catch {
+                pantalla.innerText = "Error";
+            }
+        }
+    </script>
+
+    <!-- Activar la aplicación como PWA -->
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("./sw.js")
+                    .then(() => {
+                        console.log("Service Worker activado");
+                    })
+                    .catch(error => {
+                        console.log("Error:", error);
+                    });
+            });
+        }
+    </script>
+
+</body>
+
+</html>

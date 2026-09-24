@@ -1,0 +1,10 @@
+{
+    "name": "Mi Calculadora",
+    "short_name": "Calculadora",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#202124",
+    "theme_color": "#202124",
+    "description": "Mi calculadora personal",
+    "orientation": "portrait"
+}

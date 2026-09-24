@@ -3,31 +3,47 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <title>Mi Calculadora</title>
 
     <link rel="manifest" href="manifest.json">
+
     <meta name="theme-color" content="#202124">
 
-    <!-- Configuración para iPhone -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Calculadora">
 
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            user-select: none;
+        }
+
+        html,
         body {
             margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
             font-family: Arial, sans-serif;
             background: #202124;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            touch-action: manipulation;
         }
 
         .calculadora {
-            width: 320px;
+            width: min(92vw, 360px);
             background: #303134;
             padding: 20px;
             border-radius: 25px;
@@ -42,8 +58,9 @@
             padding: 20px 15px;
             border-radius: 15px;
             margin-bottom: 15px;
-            min-height: 50px;
+            min-height: 70px;
             overflow: hidden;
+            white-space: nowrap;
         }
 
         .botones {
@@ -60,10 +77,17 @@
             cursor: pointer;
             background: #444;
             color: white;
+
+            /* Evita comportamientos de navegador al tocar */
+            touch-action: manipulation;
+            -webkit-user-select: none;
+            user-select: none;
+            outline: none;
         }
 
-        button:hover {
-            background: #555;
+        button:active {
+            transform: scale(0.95);
+            opacity: 0.8;
         }
 
         .operador {
@@ -152,17 +176,10 @@
         }
     </script>
 
-    <!-- Activar la aplicación como PWA -->
     <script>
         if ("serviceWorker" in navigator) {
             window.addEventListener("load", () => {
-                navigator.serviceWorker.register("./sw.js")
-                    .then(() => {
-                        console.log("Service Worker activado");
-                    })
-                    .catch(error => {
-                        console.log("Error:", error);
-                    });
+                navigator.serviceWorker.register("./sw.js");
             });
         }
     </script>
